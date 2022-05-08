@@ -1,39 +1,16 @@
-import axios from 'axios';
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
+import useLocation from '../hooks/useLocation';
+
 
 const Weather = () => {
 
-    const [ weather, setWeather] = useState({})
-
-    useEffect(()=>{
-
-        function success(pos) {
-            var crd = pos.coords;
-            
-            console.log('Your current position is:');
-            console.log(`Latitude : ${crd.latitude}`);
-            console.log(`Longitude: ${crd.longitude}`);
-            console.log(`More or less ${crd.accuracy} meters.`);
-
-            axios 
-            .get(`https://api.openweathermap.org/data/2.5/weather?lat=${crd.latitude}&lon=${crd.longitude}&appid=f0efe9771bb5b2f163ff96cc0c1d55d3`)
-            .then( res => setWeather(res.data) )
-        }
-        
-        function error(err) {
-            console.warn(`ERROR(${err.code}): ${err.message}`);
-        };
-
-        navigator.geolocation.getCurrentPosition(success, error);
-
-    }, []);
-
-
+    const {weather}=useLocation();
     const [ degrees, setDegrees] = useState(true);
-
     let tempeture = Math.round((((weather.main?.temp)-273.15)*(9/5)+32));
+    const changeTempeture = () => setDegrees(!degrees); 
 
-    const changeTempeture = () => setDegrees(!degrees);
+
+    
 
     return (
         <div className='container'>
